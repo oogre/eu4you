@@ -4,7 +4,7 @@ import ConfigParser
 import json
 import grovepi
 import time
-import grovepi
+import requests
 import logging
 
 from ultrasonicSensorReader import *
@@ -18,11 +18,12 @@ logging.basicConfig(filename="../eu4you.log", filemode='a',
                             datefmt='%Y-%m-%d %H:%M:%S',
                             level=logging.DEBUG)
 
-
 logging.info("start") 
 
 config = ConfigParser.ConfigParser()
 config.readfp(open('../config.cfg'))
+config = json.load(open('/home/pi/bitrepublic/Config.json'))                                                    #added by iGor for the post request to create Bitsoils
+address = config["requests"]["genBitSoil"]["Address"]                                                           #getting the address from the config
 
 USReader = ultrasonicSensorReader("USReader", json.loads(config.get("sensor", "pins")), config.getint("sensor", "dist_limit"), grovepi)
 USReader.start()
@@ -61,6 +62,8 @@ while True:
 				if perfume_duration != 0 :
 					perfume_stop_at = t + perfume_duration
 				sPlayer_start_at = t + sPlayer_start_defered
+                
+                createBitsoil()
 			else :
 				logging.info("disactivation")
 				buzz_stop_at = t + buzz_stop_defered

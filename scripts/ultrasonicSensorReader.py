@@ -25,7 +25,9 @@ class ultrasonicSensorReader :
 		if not self.exitFlag :
 			active = False
 			for i, pin in enumerate(self.sensor_pins):
+				print(pin)
 				self.dists[i] = self.grovepi.ultrasonicRead(pin)
+				print("4")
 				if self.dists[i] is not False :
 					self.distSmooth[i] = int(round(self.dists[i]*0.5 + self.distSmooth[i]*0.5))
 					active |= self.distSmooth[i] <= self.dist_limit
